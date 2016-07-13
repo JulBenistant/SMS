@@ -54,7 +54,7 @@ function [datax2] = SMS_run_trial_social_V1Beta(window, data, sc, parameters, tr
     [total_ranking, rank, Payoff_REffort] = ranking(score,data,trial);
 
     %**creation text for first feedback**
-    text_ownpayoff_fb1 = sprintf('You''re ranked %f and you earned %2.f euros',rank,Payoff_REffort);
+    text_ownpayoff_fb1 = sprintf('You''re ranked %i and you earned %2.f euros',rank,Payoff_REffort);
     % First feedback
     DrawNoKey(window,sc,text_ownpayoff_fb1,2);
                 
@@ -67,28 +67,27 @@ if rank == 1
     rt_decision = 0;
     decision2steal = 0;
     
-else % Determine cost and earing of stealing the first player
-    PPts2steal = (total_ranking(2,1)-total_ranking(2,rank));
-    cost_stealing = PPts2steal*cost_ratio;
-    text_stealing_cost = sprintf('It would cost you %2.f euros',cost_stealing);
-    Earning_steal = (total_ranking(3,1)-total_ranking(3,rank));
-    text_stealing_earning = sprintf(' and you will earn %2.f euros',Earning_steal);
-    text_stealing_screen_begining = {'If you decide to take some points from the first player, press Enter:'};
-    text_stealing_screen_end = {'If you dont want to take the points, please wait and press no button'};
+else % Just stealing from the first
+    text_stealing_1 = {'You will be ranked as first in this trial'};
+    text_stealing_2 = {' and you will earn nothing'};
+    text_stealing_3 = {'If you decide to take some points from the first player, press Enter:'};
+    text_stealing_4 = {'If you dont want to take the points, please wait and press no button'};
     
-    [rt_decision,decision2steal] = DecisionScreen(window,sc,([text_stealing_screen_begining{1},...
-    data.text.jump_line{1}, data.text.jump_line{1}, text_stealing_cost,text_stealing_earning,...
-    data.text.jump_line{1},text_stealing_screen_end{1}]),30,timeout_stealing);
+    [rt_decision,decision2steal] = DecisionScreen(window,sc,([text_stealing_3{1},...
+    data.text.jump_line{1}, data.text.jump_line{1}, text_stealing_1{1},...
+    text_stealing_2{1}, data.text.jump_line{1},text_stealing_4{1}]),30,timeout_stealing);
 end
          
     WaitSecs(1) %isi between end of DM (whatever the output) second fb.
     
 if rank == 1 || decision2steal == 0
-    text_ownpayoff_fb2_nthg = sprintf('You earned in this trial %.2f euros', Payoff_REffort);
+    Final_rank = rank;
+    text_ownpayoff_fb2_nthg = sprintf('You''re ranked %i on 5 and you earned %2.f euros',Final_rank,Payoff_REffort);
     Final_Payoff_Stl = Payoff_REffort;
 else
-    Final_Payoff_Stl = Payoff_REffort + Earning_steal - cost_stealing; % Total earning for the trial real effort + marginal benefit of stealing
-    text_ownpayoff_fb2_stl = sprintf('You earned in this trial %.2f euros', Final_Payoff_Stl);
+    Final_rank = 1;
+    text_ownpayoff_fb2_stl = sprintf('You''re ranked %i on 5 and you earned %2.f euros',Final_rank,Payoff_REffort);
+    Final_Payoff_Stl = Payoff_REffort;
 end
 
 %% ***************************Feedback 2********************************
@@ -104,7 +103,7 @@ end
 %% ***************************Save table format********************************
 
 datax2 = table(time_start_square,time_press_square,rt_raw,rt_rounded,score,...
-    rank,Payoff_REffort,rt_decision,decision2steal,Final_Payoff_Stl);
+    rank,Final_rank,rt_decision,decision2steal,Final_Payoff_Stl);
 end
 
 function [total_ranking, rank, Payoff_REffort] = ranking(score,data,trial)
