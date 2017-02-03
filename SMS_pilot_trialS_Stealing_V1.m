@@ -50,9 +50,9 @@ function [data] = SMS_pilot_trialS_Stealing_V1(window, cfg, data)
 %% ****************************** Feedback*************************
     for nb = 1:ntrial
         
-        text_period = sprintf('Période n°%d',nb);
+        text_period = sprintf('PÃ©riode nÂ°%d',nb);
         First_Rank= rank_mat(data.Calc(size(data.Calc,1),nb));
-        text_ownpayoff_fb1={'Pour le problème sélectionné vous êtes classé'};
+        text_ownpayoff_fb1={'Pour le problÃ¨me sÃ©lectionnÃ© vous Ãªtes classÃ©'};
         
         % First feedback
 %         ImgNoKey(window,cfg,[text_ownpayoff_fb1{1}, cfg.social_fb{1,First_Rank}, text_ownpayoff_fb{1}],3,...
@@ -62,18 +62,18 @@ function [data] = SMS_pilot_trialS_Stealing_V1(window, cfg, data)
         FixationCross(window,cfg);
         
         if data.Calc(size(data.Calc,1),nb) == 1
-            text_NoStl = {'Vous avez le rang le plus élevé pour cette période'};
+            text_NoStl = {'Vous avez le rang le plus Ã©levÃ© pour cette pÃ©riode'};
             DrawNoKey1(window,cfg,text_NoStl{1},3);
             data.Soc(1,nb) = rank_mat(1);
         else
             %Stealing screen
-            data = Stealing_Screen(window, cfg, data, nb,First_Rank,nb);
+            data = Stealing_Screen(window, cfg, data, nb,First_Rank);
             
             % ISI (! Text and not a fixing cross and no precise duration)
             FixationCross(window,cfg);
 
             %**creation text for second feedback**
-            text_ownpayoff_fb2 = {'Pour cette période vous êtes classé'};
+            text_ownpayoff_fb2 = {'Pour cette pÃ©riode vous Ãªtes classÃ©'};
             
             % Second feedback
             DrawNoKey(window,cfg,[text_ownpayoff_fb2{1}, cfg.social_fb{1,data.Soc(1,nb)}, text_ownpayoff_fb{1}],4,40,text_period);
