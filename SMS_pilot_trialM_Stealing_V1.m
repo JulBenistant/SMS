@@ -35,11 +35,11 @@ function [data] = SMS_pilot_trialM_Stealing_V1(window, cfg, data)
     end
 %% ****************************** Feedback*************************
     for nb = 1:ntrial
-        text_period = sprintf('Période n°%d',...
+        text_period = sprintf('PÃ©riode nÂ°%d',...
             nb);
         First_Payoff = cfg.Table_payoff(data.Calc(size(data.Calc,1),nb));
         %**creation text for first feedback**
-        text_ownpayoff_fb1 = sprintf('Pour le problème sélectionné vous avez gagnez %d euros',...
+        text_ownpayoff_fb1 = sprintf('Pour le problÃ¨me sÃ©lectionnÃ© vous avez gagnez %d euros',...
             First_Payoff);
         % First feedback
         DrawNoKey(window,cfg,text_ownpayoff_fb1,3,40,text_period);
@@ -48,18 +48,18 @@ function [data] = SMS_pilot_trialM_Stealing_V1(window, cfg, data)
 %         FixationCross(window,cfg);
         
         if data.Calc(size(data.Calc,1),nb) == 1
-            text_NoStl = {'Vous avez gagnez le montant maxium pour cette période'};
+            text_NoStl = {'Vous avez gagnez le montant maxium pour cette pÃ©riode'};
             DrawNoKey1(window,cfg,text_NoStl{1},3);
             data.Mon(1,nb) = cfg.Table_payoff(1);
         else
             %Stealing screen
-            data = Stealing_Screen(window, cfg, data, nb, First_Payoff,nb);
+            data = Stealing_Screen(window, cfg, data, nb, First_Payoff);
             
             % ISI (! Text and not a fixing cross and no precise duration)
 %             FixationCross(window,cfg);
 
             %**creation text for second feedback**
-            text_ownpayoff_fb2 = sprintf('Vous avez gagnez, pour cette période, %d euros',...
+            text_ownpayoff_fb2 = sprintf('Vous avez gagnez, pour cette pÃ©riode, %d euros',...
                 data.Mon(1,nb));
 
             % Second feedback
